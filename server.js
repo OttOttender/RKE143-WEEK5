@@ -34,17 +34,25 @@ const server = http.createServer((request, response) => {
         });
         
     } else if (requestUrl === '/contact') {
-        response.write(`Hello from port ${requestUrl}.`);
+        // Serve the contact.html file
+        fs.readFile('contact.html', (error, fileContent) => {
+            if(error){
+                response.writeHead(404);
+                response.write(`Error. File not found.`);
+            } else {
+                response.writeHead(200, { 'Content-Type': 'text/html' });
+                response.write(fileContent);
+            }
+
+            response.end();
+        });
+        
     } else {
         response.writeHead(404);
         response.write(`Error. ${requestUrl} page not found.`);
         response.end();
     }
-    
-    
 });
-
-//Ctrl + c
 
 server.listen(port, error => {
     if(error){
